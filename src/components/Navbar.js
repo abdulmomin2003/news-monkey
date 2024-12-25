@@ -19,7 +19,7 @@ export class Navbar extends Component {
 
     return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top mb-2 border border-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-black   fixed-top mb-2 border border-dark">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
               News Monkey
