@@ -1,16 +1,29 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { SavedContext } from "./savedContext";
 
 export class Navbar extends Component {
-  static propTypes = {};
+  static contextType = SavedContext;
 
   render() {
+    const { savedArticles } = this.context; // Get saved articles from context
+    const categories = [
+      "business",
+      "entertainment",
+      "general",
+      "health",
+      "science",
+      "sports",
+      "technology",
+    ];
+
     return (
       <div>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary mb-2 border border-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top mb-2 border border-dark">
           <div className="container-fluid">
-            <a className="navbar-brand" href="/">
+            <Link className="navbar-brand" to="/">
               News Monkey
-            </a>
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -26,29 +39,29 @@ export class Navbar extends Component {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              {/* Center Categories */}
+              <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+                {categories.map((category) => (
+                  <li className="nav-item" key={category}>
+                    <Link className="nav-link" to={`/${category}`}>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {/* Saved Link Aligned to the End */}
+              <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/about">
-                    About
-                  </a>
+                  <Link
+                    className={`nav-link ${
+                      savedArticles.length === 0 ? "disabled" : ""
+                    }`}
+                    to="/saved"
+                  >
+                    Saved
+                  </Link>
                 </li>
               </ul>
-              <form className="d-flex" role="search">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-              </form>
             </div>
           </div>
         </nav>

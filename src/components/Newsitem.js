@@ -1,12 +1,36 @@
 import React, { Component } from "react";
+import { SavedContext } from "./savedContext";
 
 export class Newsitem extends Component {
+  static contextType = SavedContext;
+
+  constructor() {
+    super();
+    this.state = {
+      showSuccess: false, // State to handle popup visibility
+    };
+  }
+
+  handleSave = (article) => {
+    const { saveArticle } = this.context;
+    saveArticle(article); // Save the article
+    this.setState({ showSuccess: true }); // Show the success message
+
+    // Hide the popup after 3 seconds
+    setTimeout(() => {
+      this.setState({ showSuccess: false });
+    }, 3000);
+  };
+
   render() {
     const { title, description, imageUrl, newsUrl } = this.props;
+    const article = { title, description, imageUrl, newsUrl };
+
     // Placeholder image for missing images
     const placeholderImage = "https://via.placeholder.com/150";
+
     return (
-      <div className="card my-3" style={{ width: "18rem" }}>
+      <div className="card my-3">
         <img
           src={imageUrl ? imageUrl : placeholderImage}
           className="card-img-top"
@@ -46,15 +70,31 @@ export class Newsitem extends Component {
           >
             {description ? description : "No description available."}
           </p>
-          <a
-            href={newsUrl}
-            className="btn btn-sm btn-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read More
-          </a>
+          <div className="d-flex justify-content-between align-items-center">
+            <a
+              href={newsUrl}
+              className="btn btn-sm btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read More
+            </a>
+            <button
+              className="btn btn-sm btn-success"
+              onClick={() => this.handleSave(article)}
+            >
+              Save
+            </button>
+          </div>
         </div>
+        {this.state.showSuccess && (
+          <div
+            className="alert alert-success mt-3"
+            style={{ position: "absolute", bottom: "10px", right: "10px" }}
+          >
+            Article saved successfully!
+          </div>
+        )}
       </div>
     );
   }
